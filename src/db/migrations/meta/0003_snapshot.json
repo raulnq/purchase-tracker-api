@@ -1,0 +1,179 @@
+{
+  "id": "d14c8dcb-d1c2-4de9-af66-88b046fb7f43",
+  "prevId": "70e600b2-e2c1-42d3-bbdc-750731bbf04d",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "purchase_tracker.stores": {
+      "name": "stores",
+      "schema": "purchase_tracker",
+      "columns": {
+        "storeid": {
+          "name": "storeid",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "enabled": {
+          "name": "enabled",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "purchase_tracker.categories": {
+      "name": "categories",
+      "schema": "purchase_tracker",
+      "columns": {
+        "categoryid": {
+          "name": "categoryid",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "purchase_tracker.products": {
+      "name": "products",
+      "schema": "purchase_tracker",
+      "columns": {
+        "productid": {
+          "name": "productid",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "code": {
+          "name": "code",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "categoryid": {
+          "name": "categoryid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "products_categoryid_categories_categoryid_fk": {
+          "name": "products_categoryid_categories_categoryid_fk",
+          "tableFrom": "products",
+          "tableTo": "categories",
+          "schemaTo": "purchase_tracker",
+          "columnsFrom": ["categoryid"],
+          "columnsTo": ["categoryid"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "purchase_tracker.purchases": {
+      "name": "purchases",
+      "schema": "purchase_tracker",
+      "columns": {
+        "purchaseid": {
+          "name": "purchaseid",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "storeid": {
+          "name": "storeid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "date": {
+          "name": "date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "total": {
+          "name": "total",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "createdat": {
+          "name": "createdat",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "purchases_storeid_stores_storeid_fk": {
+          "name": "purchases_storeid_stores_storeid_fk",
+          "tableFrom": "purchases",
+          "tableTo": "stores",
+          "schemaTo": "purchase_tracker",
+          "columnsFrom": ["storeid"],
+          "columnsTo": ["storeid"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

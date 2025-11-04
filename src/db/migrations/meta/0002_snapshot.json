@@ -1,0 +1,124 @@
+{
+  "id": "70e600b2-e2c1-42d3-bbdc-750731bbf04d",
+  "prevId": "d36f7e55-a3db-4dc7-aaa0-eb31b4f53b3e",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "purchase_tracker.stores": {
+      "name": "stores",
+      "schema": "purchase_tracker",
+      "columns": {
+        "storeid": {
+          "name": "storeid",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "enabled": {
+          "name": "enabled",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "purchase_tracker.categories": {
+      "name": "categories",
+      "schema": "purchase_tracker",
+      "columns": {
+        "categoryid": {
+          "name": "categoryid",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "purchase_tracker.products": {
+      "name": "products",
+      "schema": "purchase_tracker",
+      "columns": {
+        "productid": {
+          "name": "productid",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "code": {
+          "name": "code",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "categoryid": {
+          "name": "categoryid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "products_categoryid_categories_categoryid_fk": {
+          "name": "products_categoryid_categories_categoryid_fk",
+          "tableFrom": "products",
+          "tableTo": "categories",
+          "schemaTo": "purchase_tracker",
+          "columnsFrom": ["categoryid"],
+          "columnsTo": ["categoryid"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

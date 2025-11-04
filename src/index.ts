@@ -1,19 +1,27 @@
 import { serve } from '@hono/node-server';
-import { Hono } from 'hono';
-import dotenv from 'dotenv';
-dotenv.config();
-const app = new Hono();
+import { ENV } from '@/env.js';
+import { app } from './app.js';
 
-app.get('/', c => {
-  return c.text('Hello Hono!');
+process.on('uncaughtException', err => {
+  console.error(err.name, err.message);
+  process.exit(1);
 });
 
-serve(
+const server = serve(
   {
     fetch: app.fetch,
-    port: Number(process.env.PORT ?? 3000),
+    port: ENV.PORT,
   },
   info => {
-    console.log(`Server is running on http://localhost:${info.port}`);
+    console.log(
+      `Server(${ENV.NODE_ENV}) is running on http://localhost:${info.port}`
+    );
   }
 );
+
+process.on('unhandledRejection', (err: Error) => {
+  console.error(err.name, err.message);
+  server.close(() => {
+    process.exit(1);
+  });
+});
