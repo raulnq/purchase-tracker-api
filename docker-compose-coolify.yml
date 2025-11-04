@@ -5,12 +5,13 @@ services:
       dockerfile: Dockerfile
       target: migrator
     restart: no
+    exclude_from_hc: true
     environment:
       - NODE_ENV=production
       - POSTGRES_DB=${POSTGRES_DB:?}
       - POSTGRES_USER=${POSTGRES_USER:?}
       - POSTGRES_SERVER=${POSTGRES_SERVER:?}
-      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_SERVER}:5432/${POSTGRES_DB}
+      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_SERVER}:5432/${POSTGRES_DB}
   api:
     build:
       context: .
@@ -25,7 +26,7 @@ services:
       - POSTGRES_USER=${POSTGRES_USER:?}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:?}
       - POSTGRES_SERVER=${POSTGRES_SERVER:?}
-      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_SERVER}:5432/${POSTGRES_DB}
+      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_SERVER}:5432/${POSTGRES_DB}
       - TOKEN=${TOKEN:?}
     healthcheck:
       test:
