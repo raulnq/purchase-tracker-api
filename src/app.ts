@@ -14,7 +14,7 @@ export const app = new Hono({ strict: false });
 app.use(logger());
 if (ENV.TOKEN) {
   app.use('/api/*', bearerAuth({ token: ENV.TOKEN }));
-  app.use('/mcp/*', bearerAuth({ token: ENV.TOKEN }));
+  //app.use('/mcp/*', bearerAuth({ token: ENV.TOKEN }));
 }
 app.route('/mcp', mcpRoute);
 app.route('/api/stores', storeRoute);
