@@ -3,7 +3,7 @@ import { db } from '@/db/index.js';
 import { stores, storeSchema } from '@/db/schema/stores.js';
 import { v7 } from 'uuid';
 import { z } from 'zod';
-import { zValidator } from '@/util/validatorWrapper.js';
+import { zValidator } from '@/util/validation.js';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 
 const schema = z.object({

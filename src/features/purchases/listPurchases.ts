@@ -3,7 +3,7 @@ import { db } from '@/db/index.js';
 import { purchases } from '@/db/schema/purchases.js';
 import { stores } from '@/db/schema/stores.js';
 import { count, eq, and, gte, lte, SQL } from 'drizzle-orm';
-import { zValidator } from '@/util/validatorWrapper.js';
+import { zValidator } from '@/util/validation.js';
 import { pagination } from '@/util/pagination.js';
 import { z } from 'zod';
 

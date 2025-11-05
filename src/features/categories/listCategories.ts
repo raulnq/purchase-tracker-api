@@ -2,7 +2,7 @@ import { Hono } from 'hono';
 import { db } from '@/db/index.js';
 import { categories } from '@/db/schema/categories.js';
 import { count, like, SQL, and } from 'drizzle-orm';
-import { zValidator } from '@/util/validatorWrapper.js';
+import { zValidator } from '@/util/validation.js';
 import { pagination } from '@/util/pagination.js';
 import { z } from 'zod';
 

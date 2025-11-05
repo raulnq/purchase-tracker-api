@@ -3,7 +3,7 @@ import { exists } from './findCategory.js';
 import { db } from '@/db/index.js';
 import { categories } from '@/db/schema/categories.js';
 import { eq } from 'drizzle-orm';
-import { zValidator } from '@/util/validatorWrapper.js';
+import { zValidator } from '@/util/validation.js';
 import { z } from 'zod';
 
 const schema = z.object({

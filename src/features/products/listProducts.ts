@@ -2,7 +2,7 @@ import { Hono } from 'hono';
 import { db } from '@/db/index.js';
 import { products, productSchema } from '@/db/schema/products.js';
 import { count, eq, like, and, SQL } from 'drizzle-orm';
-import { zValidator } from '@/util/validatorWrapper.js';
+import { zValidator } from '@/util/validation.js';
 import { pagination, createPageSchema } from '@/util/pagination.js';
 import { z } from 'zod';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';

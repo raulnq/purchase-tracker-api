@@ -6,7 +6,7 @@ import { products } from '@/db/schema/products.js';
 import { stores } from '@/db/schema/stores.js';
 import { categories } from '@/db/schema/categories.js';
 import { eq } from 'drizzle-orm';
-import { zValidator } from '@/util/validatorWrapper.js';
+import { zValidator } from '@/util/validation.js';
 import { z } from 'zod';
 import { NotFoundError } from '@/middlewares/onError.js';
 

@@ -16,7 +16,8 @@
     "docker:up": "docker-compose up database -d",
     "docker:down": "docker-compose down database",
     "docker:stop": "docker-compose stop database",
-    "generate": "build && drizzle-kit generate"
+    "generate": "build && drizzle-kit generate",
+    "migrate": "drizzle-kit migrate"
   },
   "dependencies": {
     "@hono/mcp": "^0.1.5",

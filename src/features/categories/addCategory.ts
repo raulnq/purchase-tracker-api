@@ -3,7 +3,7 @@ import { db } from '@/db/index.js';
 import { categories } from '@/db/schema/categories.js';
 import { v7 } from 'uuid';
 import { z } from 'zod';
-import { zValidator } from '@/util/validatorWrapper.js';
+import { zValidator } from '@/util/validation.js';
 
 const schema = z.object({
   name: z.string().nonempty().max(255),

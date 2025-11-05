@@ -7,7 +7,7 @@ import { stores } from '@/db/schema/stores.js';
 import { eq, inArray } from 'drizzle-orm';
 import { v7 } from 'uuid';
 import { z } from 'zod';
-import { zValidator } from '@/util/validatorWrapper.js';
+import { zValidator } from '@/util/validation.js';
 import { NotFoundError } from '@/middlewares/onError.js';
 import { createInsertSchema as drizzle2zod } from 'drizzle-zod';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';

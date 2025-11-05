@@ -3,7 +3,7 @@ import { exists } from './findProduct.js';
 import { db } from '@/db/index.js';
 import { products } from '@/db/schema/products.js';
 import { eq } from 'drizzle-orm';
-import { zValidator } from '@/util/validatorWrapper.js';
+import { zValidator } from '@/util/validation.js';
 import { z } from 'zod';
 
 const schema = z.object({
