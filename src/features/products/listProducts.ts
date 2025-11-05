@@ -7,13 +7,11 @@ import { pagination, createPageSchema } from '@/util/pagination.js';
 import { z } from 'zod';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 
-const schema = z
-  .object({
-    name: z.string().optional(),
-    code: z.string().optional(),
-    categoryId: z.string().uuid().optional(),
-  })
-  .merge(pagination);
+const schema = pagination.extend({
+  name: z.string().optional(),
+  code: z.string().optional(),
+  categoryId: z.string().uuid().optional(),
+});
 
 export type ListProducts = z.infer<typeof schema>;
 

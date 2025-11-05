@@ -6,11 +6,9 @@ import { zValidator } from '@/util/validation.js';
 import { pagination } from '@/util/pagination.js';
 import { z } from 'zod';
 
-const schema = z
-  .object({
-    name: z.string().optional(),
-  })
-  .merge(pagination);
+const schema = pagination.extend({
+  name: z.string().optional(),
+});
 
 export type ListCategories = z.infer<typeof schema>;
 

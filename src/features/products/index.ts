@@ -5,6 +5,7 @@ import { findRoute } from './findProduct.js';
 import { editRoute } from './editProduct.js';
 import { assignCategoryRoute } from './assignCategory.js';
 import { removeCategoryRoute } from './removeCategory.js';
+import { purchaseHistoryRoute } from './findProductPurchaseHistory.js';
 
 export const productRoute = new Hono();
 
@@ -14,4 +15,5 @@ productRoute
   .route('/', findRoute)
   .route('/', editRoute)
   .route('/', assignCategoryRoute)
-  .route('/', removeCategoryRoute);
+  .route('/', removeCategoryRoute)
+  .route('/', purchaseHistoryRoute);

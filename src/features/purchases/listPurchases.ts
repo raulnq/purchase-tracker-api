@@ -7,13 +7,12 @@ import { zValidator } from '@/util/validation.js';
 import { pagination } from '@/util/pagination.js';
 import { z } from 'zod';
 
-const schema = z
-  .object({
+const schema = pagination
+  .extend({
     storeId: z.string().uuid().optional(),
     startDate: z.coerce.date().optional(),
     endDate: z.coerce.date().optional(),
   })
-  .merge(pagination)
   .refine(
     data => {
       if (data.startDate && data.endDate) {

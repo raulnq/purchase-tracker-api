@@ -4,6 +4,10 @@ import { type Product } from '@/db/schema/products.js';
 import { ProblemDocument } from 'http-problem-details';
 import { invokeListQueryApi, invokeMutationApi } from '../utils.js';
 import type { ListProducts } from '@/features/products/listProducts.js';
+import type {
+  FindProductPurchaseHistory,
+  PurchaseHistoryItem,
+} from '@/features/products/findProductPurchaseHistory.js';
 import type { Page } from '@/util/pagination.js';
 
 export const randomProduct = (options?: Partial<AddProduct>): AddProduct => {
@@ -48,6 +52,20 @@ export const listProducts = async (
   return invokeListQueryApi<ListProducts, Product>({
     input,
     endpoint: '/api/products',
+    problemDocument,
+  });
+};
+
+export const findProductPurchaseHistory = async (
+  productId: string,
+  input: FindProductPurchaseHistory,
+  problemDocument: ProblemDocument | undefined = undefined
+): Promise<
+  [Page<PurchaseHistoryItem> | undefined, ProblemDocument | undefined]
+> => {
+  return invokeListQueryApi<FindProductPurchaseHistory, PurchaseHistoryItem>({
+    input,
+    endpoint: `/api/products/${productId}/purchase-history`,
     problemDocument,
   });
 };
