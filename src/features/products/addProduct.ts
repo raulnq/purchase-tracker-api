@@ -19,7 +19,7 @@ addRoute.post('/', zValidator('json', schema), async c => {
   return c.json(product, 201);
 });
 
-const addProduct = async ({ name, code }: AddProduct) => {
+export const addProduct = async ({ name, code }: AddProduct) => {
   return await db
     .insert(products)
     .values({

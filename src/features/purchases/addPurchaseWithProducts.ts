@@ -9,7 +9,7 @@ import { zValidator } from '@/util/validation.js';
 import { createInsertSchema as drizzle2zod } from 'drizzle-zod';
 import { createPurchase } from '@/features/purchases/addPurchase.js';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import { addProduct } from '$/tests/products/productDsl.js';
+import { addProduct } from '../products/addProduct.js';
 
 const itemSchema = z.object({
   product: z.object({
