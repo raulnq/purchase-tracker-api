@@ -11,5 +11,24 @@ describe('List Product Endpoint', () => {
         pageSize: 10,
       });
     });
+
+    test('should list products by code', async () => {
+      const [product] = await addProduct(apple());
+      await listProducts({
+        codes: [product!.code!],
+        pageNumber: 1,
+        pageSize: 10,
+      });
+    });
+
+    test('should list products by multiple codes', async () => {
+      const [appleProduct] = await addProduct(apple());
+      const [riceProduct] = await addProduct(apple());
+      await listProducts({
+        codes: [appleProduct!.code!, riceProduct!.code!],
+        pageNumber: 1,
+        pageSize: 10,
+      });
+    });
   });
 });

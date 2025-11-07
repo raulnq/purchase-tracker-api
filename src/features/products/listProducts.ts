@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
 import { db } from '@/db/index.js';
 import { products, productSchema } from '@/db/schema/products.js';
-import { count, eq, like, and, SQL } from 'drizzle-orm';
+import { count, eq, like, and, SQL, inArray } from 'drizzle-orm';
 import { zValidator } from '@/util/validation.js';
 import { pagination, createPageSchema } from '@/util/pagination.js';
 import { z } from 'zod';
@@ -9,7 +9,9 @@ import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 
 const schema = pagination.extend({
   name: z.string().optional(),
-  code: z.string().optional(),
+  codes: z
+    .union([z.string().transform(val => [val]), z.array(z.string())])
+    .optional(),
   categoryId: z.string().uuid().optional(),
 });
 
@@ -26,14 +28,14 @@ export const listProducts = async ({
   pageNumber,
   pageSize,
   name,
-  code,
+  codes,
   categoryId,
 }: ListProducts) => {
   const filters: SQL[] = [];
   const offset = (pageNumber - 1) * pageSize;
   const limit = pageSize;
   if (name) filters.push(like(products.name, `%${name}%`));
-  if (code) filters.push(like(products.code, `%${code}%`));
+  if (codes && codes.length > 0) filters.push(inArray(products.code, codes));
   if (categoryId) filters.push(eq(products.categoryId, categoryId));
 
   const [{ totalCount }] = await db
@@ -62,18 +64,19 @@ export const ListProductsTool = (server: McpServer) => {
     'list_product',
     {
       title: 'List Products',
-      description: 'List all products',
+      description:
+        'List all products with optional filtering by name, codes (single or multiple), or category',
       inputSchema: schema.shape,
       outputSchema: {
         success: z.boolean(),
         page: createPageSchema(productSchema),
       },
     },
-    async ({ name, code, categoryId, pageNumber, pageSize }) => {
+    async ({ name, codes, categoryId, pageNumber, pageSize }) => {
       try {
         const page = await listProducts({
           name,
-          code,
+          codes,
           categoryId,
           pageNumber,
           pageSize,

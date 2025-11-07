@@ -70,7 +70,13 @@ export const invokeListQueryApi = async <TInput, TResult>(
   if (input && typeof input === 'object') {
     Object.entries(input).forEach(([key, value]) => {
       if (value !== undefined && value !== null) {
-        queryParams.append(key, String(value));
+        if (Array.isArray(value)) {
+          value.forEach(item => {
+            queryParams.append(key, String(item));
+          });
+        } else {
+          queryParams.append(key, String(value));
+        }
       }
     });
   }
