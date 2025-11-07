@@ -1,0 +1,1 @@
+ALTER TABLE "purchase_tracker"."purchase_items" ADD COLUMN "unit" varchar(32) NOT NULL;

@@ -16,6 +16,7 @@ const itemSchema = z.object({
   productId: z.string().uuid(),
   quantity: z.number().positive(),
   price: z.number().positive(),
+  unit: z.string(),
 });
 
 const schema = z.object({
@@ -105,6 +106,7 @@ export const createPurchase = async function ({
           price: i.price.toString(),
           quantity: i.quantity.toString(),
           total: (i.price * i.quantity).toString(),
+          unit: i.unit,
         }))
       )
       .returning();

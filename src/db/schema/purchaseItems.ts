@@ -4,6 +4,7 @@ import {
   decimal,
   serial,
   primaryKey,
+  varchar,
 } from 'drizzle-orm/pg-core';
 import { purchases } from './purchases.js';
 import { products } from './products.js';
@@ -23,6 +24,7 @@ export const purchaseItems = purchaseTrackerSchema.table(
       .notNull(),
     price: decimal('price', { precision: 10, scale: 2 }).notNull(),
     quantity: decimal('quantity', { precision: 10, scale: 2 }).notNull(),
+    unit: varchar('unit', { length: 32 }).notNull(),
     total: decimal('total', { precision: 10, scale: 2 }).notNull(),
   },
   table => ({

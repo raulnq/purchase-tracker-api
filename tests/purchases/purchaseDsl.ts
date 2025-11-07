@@ -40,6 +40,7 @@ export const randomPurchaseItem = (
     productId: v7(),
     quantity: faker.number.int({ min: 1, max: 10 }),
     price: faker.number.float({ min: 0.99, max: 999.99, fractionDigits: 2 }),
+    unit: 'UN',
     ...options,
   };
 };
@@ -50,6 +51,7 @@ export const randomPurchaseItemWithProduct = (
   return {
     quantity: faker.number.int({ min: 1, max: 10 }),
     price: faker.number.float({ min: 0.99, max: 999.99, fractionDigits: 2 }),
+    unit: 'UN',
     product: {
       name: faker.commerce.productName(),
       code: faker.string.numeric(10),

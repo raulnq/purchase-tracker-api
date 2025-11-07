@@ -18,6 +18,7 @@ const itemSchema = z.object({
   }),
   quantity: z.number().positive(),
   price: z.number().positive(),
+  unit: z.string(),
 });
 
 const schema = z.object({
@@ -33,7 +34,6 @@ export type AddPurchaseItemWithProduct = z.infer<typeof itemSchema>;
 const addPurchaseWithProductsResponseSchema = z.object({
   ...drizzle2zod(purchases).shape,
   items: z.array(drizzle2zod(purchaseItems)),
-  createdProducts: z.array(drizzle2zod(products)),
 });
 
 export type AddPurchaseWithProductsResponse = z.infer<
@@ -82,6 +82,7 @@ async function createPurchaseWithProducts({
       productId,
       quantity: item.quantity,
       price: item.price,
+      unit: item.unit,
     });
   }
 
