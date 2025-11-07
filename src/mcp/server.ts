@@ -1,5 +1,6 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { AddProductTool } from '@/features/products/addProduct.js';
+import { AddProductsBatchTool } from '@/features/products/addProductsBatch.js';
 import { ListProductsTool } from '@/features/products/listProducts.js';
 import { AddPurchaseTool } from '@/features/purchases/addPurchase.js';
 import { AddStoreTool } from '@/features/stores/addStore.js';
@@ -11,6 +12,7 @@ export const server = new McpServer({
 });
 
 AddProductTool(server);
+AddProductsBatchTool(server);
 ListProductsTool(server);
 AddPurchaseTool(server);
 AddStoreTool(server);

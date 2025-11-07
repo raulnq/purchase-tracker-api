@@ -1,5 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { type AddProduct } from '@/features/products/addProduct.js';
+import { type AddProductsBatch } from '@/features/products/addProductsBatch.js';
 import { type Product } from '@/db/schema/products.js';
 import { ProblemDocument } from 'http-problem-details';
 import { invokeListQueryApi, invokeMutationApi } from '../utils.js';
@@ -40,6 +41,19 @@ export const addProduct = async (
     method: 'POST',
     input,
     endpoint: '/api/products',
+    problemDocument,
+    successStatus: 201,
+  });
+};
+
+export const addProductsBatch = async (
+  input: AddProductsBatch,
+  problemDocument: ProblemDocument | undefined = undefined
+): Promise<[Product[]?, ProblemDocument?]> => {
+  return invokeMutationApi<AddProductsBatch, Product[]>({
+    method: 'POST',
+    input,
+    endpoint: '/api/products/batch',
     problemDocument,
     successStatus: 201,
   });
