@@ -55,7 +55,11 @@ addRoute.post('/', zValidator('json', schema), async c => {
   return c.json(purchase, 201);
 });
 
-async function createPurchase({ storeId, date, items }: AddPurchase) {
+export const createPurchase = async function ({
+  storeId,
+  date,
+  items,
+}: AddPurchase) {
   const [store] = await db
     .select()
     .from(stores)
@@ -110,7 +114,7 @@ async function createPurchase({ storeId, date, items }: AddPurchase) {
       items: createdItems,
     };
   });
-}
+};
 
 export const AddPurchaseTool = (server: McpServer) => {
   return server.registerTool(
