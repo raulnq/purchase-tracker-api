@@ -1,0 +1,1 @@
+ALTER TABLE "purchase_tracker"."products" ALTER COLUMN "code" SET NOT NULL;

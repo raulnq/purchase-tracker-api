@@ -7,7 +7,7 @@ import { z } from 'zod';
 import { zValidator } from '@/util/validation.js';
 const schema = z.object({
   name: z.string().nonempty().max(255),
-  code: z.string().max(255).optional(),
+  code: z.string().nonempty().max(255),
 });
 
 export type AddProduct = z.infer<typeof schema>;

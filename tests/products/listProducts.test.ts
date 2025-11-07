@@ -15,7 +15,7 @@ describe('List Product Endpoint', () => {
     test('should list products by code', async () => {
       const [product] = await addProduct(apple());
       await listProducts({
-        codes: [product!.code!],
+        codes: [product!.code],
         pageNumber: 1,
         pageSize: 10,
       });
@@ -25,7 +25,7 @@ describe('List Product Endpoint', () => {
       const [appleProduct] = await addProduct(apple());
       const [riceProduct] = await addProduct(apple());
       await listProducts({
-        codes: [appleProduct!.code!, riceProduct!.code!],
+        codes: [appleProduct!.code, riceProduct!.code],
         pageNumber: 1,
         pageSize: 10,
       });

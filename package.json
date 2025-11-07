@@ -17,7 +17,7 @@
     "docker:up": "docker-compose up database -d",
     "docker:down": "docker-compose down database",
     "docker:stop": "docker-compose stop database",
-    "generate": "build && drizzle-kit generate",
+    "generate": "npm run build && drizzle-kit generate",
     "migrate": "drizzle-kit migrate"
   },
   "dependencies": {

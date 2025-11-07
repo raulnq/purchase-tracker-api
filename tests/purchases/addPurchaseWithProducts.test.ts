@@ -28,7 +28,7 @@ describe('Add Purchase with Products Endpoint', () => {
         items: [
           randomPurchaseItemWithProduct(),
           randomPurchaseItemWithProduct({
-            product: { code: product!.code!, name: product!.name! },
+            product: { code: product!.code, name: product!.name! },
           }),
         ],
       });

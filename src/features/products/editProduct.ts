@@ -8,7 +8,7 @@ import { z } from 'zod';
 
 const schema = z.object({
   name: z.string().nonempty().max(255),
-  code: z.string().max(255).optional(),
+  code: z.string().nonempty().max(255),
 });
 
 export const editRoute = new Hono();

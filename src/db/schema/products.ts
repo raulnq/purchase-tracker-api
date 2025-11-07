@@ -7,7 +7,7 @@ const purchaseTrackerSchema = pgSchema('purchase_tracker');
 export const products = purchaseTrackerSchema.table('products', {
   productId: uuid('productid').primaryKey(),
   name: varchar('name', { length: 255 }).notNull(),
-  code: varchar('code', { length: 255 }),
+  code: varchar('code', { length: 255 }).notNull(),
   categoryId: uuid('categoryid').references(() => categories.categoryId),
 });
 
