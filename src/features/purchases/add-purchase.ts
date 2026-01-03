@@ -13,7 +13,6 @@ import { v7 } from 'uuid';
 import { z } from 'zod';
 import { zValidator } from '@/utils/validation.js';
 import { createResourceNotFoundPD } from '@/utils/problem-document.js';
-import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StatusCodes } from 'http-status-codes';
 
 const itemSchema = z.object({
@@ -45,6 +44,7 @@ export type AddPurchase = z.infer<typeof schema>;
 
 export type AddPurchaseItem = z.infer<typeof itemSchema>;
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const addPurchaseResponseSchema = z.object({
   ...purchaseSchema.shape,
   items: z.array(purchaseItemSchema),
@@ -132,46 +132,4 @@ export const createPurchase = async function ({
       items: createdItems,
     };
   });
-};
-
-export const AddPurchaseTool = (server: McpServer) => {
-  return server.registerTool(
-    'add_purchase',
-    {
-      title: 'Add Purchase',
-      description: 'Add a new purchase',
-      inputSchema: schema.shape,
-      outputSchema: {
-        success: z.boolean(),
-        purchase: addPurchaseResponseSchema.optional(),
-      },
-    },
-    async ({ storeId, date, items }) => {
-      try {
-        const purchase = await createPurchase({ storeId, date, items });
-        const structuredContent = { success: true, purchase: purchase };
-        return {
-          content: [
-            {
-              type: 'text',
-              text: JSON.stringify(purchase),
-            },
-          ],
-          structuredContent,
-        };
-      } catch (error) {
-        const errorMessage =
-          error instanceof Error ? error.message : 'Unknown error';
-        return {
-          content: [
-            {
-              type: 'text',
-              text: `Error creating purchase: ${errorMessage}`,
-            },
-          ],
-          isError: true,
-        };
-      }
-    }
-  );
 };

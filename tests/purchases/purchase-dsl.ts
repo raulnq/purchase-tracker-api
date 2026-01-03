@@ -32,7 +32,7 @@ export const randomPurchaseWithProduct = (
 ): AddPurchaseWithProducts => {
   return {
     storeId: v7(),
-    date: faker.date.past(),
+    date: faker.date.past().toISOString().split('T')[0],
     items: [],
     ...options,
   };
@@ -118,7 +118,6 @@ export async function addPurchaseWithProducts(
   const response = await client.purchases['with-products'].$post({
     json: input,
   });
-
   if (response.status === StatusCodes.CREATED) {
     assert.ok(
       !expectedProblemDocument,

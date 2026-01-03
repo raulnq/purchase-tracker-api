@@ -9,97 +9,95 @@ import { addProduct, apple, rice } from '../products/product-dsl.js';
 import { ProblemDocument } from 'http-problem-details';
 
 describe('Add Purchase Endpoint', () => {
-  describe('POST /api/purchases', async () => {
-    test('should create a one product new purchase with valid data', async () => {
-      const store = await addStore(wallmart());
-      const product = await addProduct(apple());
+  test('should create a one product new purchase with valid data', async () => {
+    const store = await addStore(wallmart());
+    const product = await addProduct(apple());
 
-      const data = randomPurchase({
-        storeId: store.storeId,
-        items: [randomPurchaseItem({ productId: product.productId })],
-      });
-
-      await addPurchase(data);
+    const data = randomPurchase({
+      storeId: store.storeId,
+      items: [randomPurchaseItem({ productId: product.productId })],
     });
 
-    test('should create a multiple products new purchase with valid data', async () => {
-      const store = await addStore(wallmart());
-      const appleProduct = await addProduct(apple());
-      const riceProduct = await addProduct(rice());
+    await addPurchase(data);
+  });
 
-      const data = randomPurchase({
-        storeId: store.storeId,
-        items: [
-          randomPurchaseItem({ productId: appleProduct.productId }),
-          randomPurchaseItem({ productId: riceProduct.productId }),
-        ],
-      });
+  test('should create a multiple products new purchase with valid data', async () => {
+    const store = await addStore(wallmart());
+    const appleProduct = await addProduct(apple());
+    const riceProduct = await addProduct(rice());
 
-      await addPurchase(data);
+    const data = randomPurchase({
+      storeId: store.storeId,
+      items: [
+        randomPurchaseItem({ productId: appleProduct.productId }),
+        randomPurchaseItem({ productId: riceProduct.productId }),
+      ],
     });
 
-    test('should return error when storeId does not exist', async () => {
-      const product = await addProduct(apple());
-      const data = randomPurchase({
-        items: [randomPurchaseItem({ productId: product.productId })],
-      });
+    await addPurchase(data);
+  });
 
-      await addPurchase(
-        data,
-        new ProblemDocument({
-          status: 404,
-          detail: `Store not found`,
-        })
-      );
+  test('should return error when storeId does not exist', async () => {
+    const product = await addProduct(apple());
+    const data = randomPurchase({
+      items: [randomPurchaseItem({ productId: product.productId })],
     });
 
-    test('should return error when productId does not exist', async () => {
-      const store = await addStore(wallmart());
+    await addPurchase(
+      data,
+      new ProblemDocument({
+        status: 404,
+        detail: `Store not found`,
+      })
+    );
+  });
 
-      const data = randomPurchase({
-        storeId: store.storeId,
-        items: [randomPurchaseItem()],
-      });
+  test('should return error when productId does not exist', async () => {
+    const store = await addStore(wallmart());
 
-      await addPurchase(
-        data,
-        new ProblemDocument({
-          status: 404,
-          detail: `Products not found: ${data.items[0].productId}`,
-        })
-      );
+    const data = randomPurchase({
+      storeId: store.storeId,
+      items: [randomPurchaseItem()],
     });
 
-    test('should return error when duplicate productId exists', async () => {
-      const store = await addStore(wallmart());
-      const product = await addProduct(apple());
+    await addPurchase(
+      data,
+      new ProblemDocument({
+        status: 404,
+        detail: `Products not found: ${data.items[0].productId}`,
+      })
+    );
+  });
 
-      const data = randomPurchase({
-        storeId: store.storeId,
-        items: [
-          randomPurchaseItem({ productId: product.productId }),
-          randomPurchaseItem({ productId: product.productId }),
-        ],
-      });
+  test('should return error when duplicate productId exists', async () => {
+    const store = await addStore(wallmart());
+    const product = await addProduct(apple());
 
-      await addPurchase(
-        data,
-        new ProblemDocument(
-          {
-            detail: 'The request contains invalid data',
-            status: 400,
-          },
-          {
-            errors: [
-              {
-                path: 'items',
-                message: 'Duplicate products are not allowed',
-                code: 'custom',
-              },
-            ],
-          }
-        )
-      );
+    const data = randomPurchase({
+      storeId: store.storeId,
+      items: [
+        randomPurchaseItem({ productId: product.productId }),
+        randomPurchaseItem({ productId: product.productId }),
+      ],
     });
+
+    await addPurchase(
+      data,
+      new ProblemDocument(
+        {
+          detail: 'The request contains invalid data',
+          status: 400,
+        },
+        {
+          errors: [
+            {
+              path: 'items',
+              message: 'Duplicate products are not allowed',
+              code: 'custom',
+            },
+          ],
+        }
+      )
+    );
   });
 });

@@ -23,7 +23,7 @@ const itemSchema = z.object({
 
 const schema = z.object({
   storeId: z.uuid(),
-  date: z.coerce.date(),
+  date: z.iso.date(),
   items: z.array(itemSchema).min(1),
 });
 
@@ -99,7 +99,11 @@ async function createPurchaseWithProducts({
     };
   });
 
-  return await createPurchase({ storeId, date, items: processedItems });
+  return await createPurchase({
+    storeId,
+    date: new Date(date),
+    items: processedItems,
+  });
 }
 
 export const AddPurchaseWithProductsTool = (server: McpServer) => {
