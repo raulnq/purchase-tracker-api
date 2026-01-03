@@ -17,7 +17,6 @@ import type { Page } from '@/types/pagination.js';
 export const randomProduct = (overrides?: Partial<AddProduct>): AddProduct => {
   return {
     name: faker.commerce.productName(),
-    code: faker.string.numeric(10),
     ...overrides,
   };
 };
@@ -25,7 +24,6 @@ export const randomProduct = (overrides?: Partial<AddProduct>): AddProduct => {
 export const apple = (overrides?: Partial<AddProduct>): AddProduct => {
   return {
     name: `apple ${faker.string.uuid()}`,
-    code: faker.string.numeric(10),
     ...overrides,
   };
 };
@@ -33,7 +31,6 @@ export const apple = (overrides?: Partial<AddProduct>): AddProduct => {
 export const rice = (overrides?: Partial<AddProduct>): AddProduct => {
   return {
     name: `rice ${faker.string.uuid()}`,
-    code: faker.string.numeric(10),
     ...overrides,
   };
 };
@@ -166,14 +163,6 @@ export const assertProduct = (product: Product) => {
         product.name,
         expected,
         `Expected name to be ${expected}, got ${product.name}`
-      );
-      return this;
-    },
-    hasCode(expected: string) {
-      assert.strictEqual(
-        product.code,
-        expected,
-        `Expected code to be ${expected}, got ${product.code}`
       );
       return this;
     },

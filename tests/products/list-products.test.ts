@@ -13,24 +13,13 @@ describe('List Product Endpoint', () => {
     assertPage(page).hasItemsCountAtLeast(1);
   });
 
-  test('should list products by code', async () => {
+  test('should list products by name', async () => {
     const product = await addProduct(apple());
     const page = await listProducts({
-      codes: [product.code],
       pageNumber: 1,
       pageSize: 10,
+      name: product.name,
     });
     assertPage(page).hasItemsCountAtLeast(1);
-  });
-
-  test('should list products by multiple codes', async () => {
-    const appleProduct = await addProduct(apple());
-    const riceProduct = await addProduct(apple());
-    const page = await listProducts({
-      codes: [appleProduct.code, riceProduct.code],
-      pageNumber: 1,
-      pageSize: 10,
-    });
-    assertPage(page).hasItemsCountAtLeast(2);
   });
 });

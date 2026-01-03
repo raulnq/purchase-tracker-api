@@ -79,8 +79,8 @@ export const addRoute = new Hono().post(
       .where(inArray(products.productId, productIds));
 
     if (existingProducts.length !== productIds.length) {
-      const foundIds = existingProducts.map(p => p.productId);
-      const missingIds = productIds.filter(id => !foundIds.includes(id));
+      const foundSet = new Set(existingProducts.map(p => p.productId));
+      const missingIds = productIds.filter(id => !foundSet.has(id));
       return c.json(
         createResourceNotFoundPD(
           c.req.path,

@@ -43,30 +43,31 @@ export const listRoute = new Hono().get(
     if (startDate) filters.push(gte(purchases.date, startDate));
     if (endDate) filters.push(lte(purchases.date, endDate));
 
-    const [{ totalCount }] = await client
-      .select({ totalCount: count() })
-      .from(purchases)
-      .innerJoin(stores, eq(purchases.storeId, stores.storeId))
-      .where(and(...filters));
-
-    const items = await client
-      .select({
-        purchaseId: purchases.purchaseId,
-        storeId: purchases.storeId,
-        storeName: stores.name,
-        date: purchases.date,
-        total: purchases.total,
-        createdAt: purchases.createdAt,
-      })
-      .from(purchases)
-      .innerJoin(stores, eq(purchases.storeId, stores.storeId))
-      .where(and(...filters))
-      .limit(limit)
-      .offset(offset)
-      .orderBy(purchases.date, purchases.createdAt);
+    const [countResult, items] = await Promise.all([
+      client
+        .select({ totalCount: count() })
+        .from(purchases)
+        .innerJoin(stores, eq(purchases.storeId, stores.storeId))
+        .where(and(...filters)),
+      client
+        .select({
+          purchaseId: purchases.purchaseId,
+          storeId: purchases.storeId,
+          storeName: stores.name,
+          date: purchases.date,
+          total: purchases.total,
+          createdAt: purchases.createdAt,
+        })
+        .from(purchases)
+        .innerJoin(stores, eq(purchases.storeId, stores.storeId))
+        .where(and(...filters))
+        .limit(limit)
+        .offset(offset)
+        .orderBy(purchases.date, purchases.createdAt),
+    ]);
 
     return c.json(
-      createPage(items, totalCount, pageNumber, pageSize),
+      createPage(items, countResult[0].totalCount, pageNumber, pageSize),
       StatusCodes.OK
     );
   }

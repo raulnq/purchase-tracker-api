@@ -54,35 +54,42 @@ export const purchaseHistoryRoute = new Hono().get(
       filters.push(gte(purchases.date, new Date(startDate)));
     }
 
-    const [{ totalCount }] = await client
-      .select({ totalCount: count() })
-      .from(purchaseItems)
-      .innerJoin(purchases, eq(purchaseItems.purchaseId, purchases.purchaseId))
-      .where(and(...filters));
-
     const offset = (pageNumber - 1) * pageSize;
 
-    const purchaseHistory = await client
-      .select({
-        purchaseItemId: purchaseItems.purchaseItemId,
-        purchaseId: purchaseItems.purchaseId,
-        purchaseDate: purchases.date,
-        storeName: stores.name,
-        price: purchaseItems.price,
-        quantity: purchaseItems.quantity,
-        total: purchaseItems.total,
-      })
-      .from(purchaseItems)
-      .innerJoin(purchases, eq(purchaseItems.purchaseId, purchases.purchaseId))
-      .innerJoin(stores, eq(purchases.storeId, stores.storeId))
-      .where(and(...filters))
-      .orderBy(desc(purchases.date), desc(purchases.createdAt))
-      .limit(pageSize)
-      .offset(offset);
+    const [countResult, purchaseHistory] = await Promise.all([
+      client
+        .select({ totalCount: count() })
+        .from(purchaseItems)
+        .innerJoin(
+          purchases,
+          eq(purchaseItems.purchaseId, purchases.purchaseId)
+        )
+        .where(and(...filters)),
+      client
+        .select({
+          purchaseItemId: purchaseItems.purchaseItemId,
+          purchaseId: purchaseItems.purchaseId,
+          purchaseDate: purchases.date,
+          storeName: stores.name,
+          price: purchaseItems.price,
+          quantity: purchaseItems.quantity,
+          total: purchaseItems.total,
+        })
+        .from(purchaseItems)
+        .innerJoin(
+          purchases,
+          eq(purchaseItems.purchaseId, purchases.purchaseId)
+        )
+        .innerJoin(stores, eq(purchases.storeId, stores.storeId))
+        .where(and(...filters))
+        .orderBy(desc(purchases.date), desc(purchases.createdAt))
+        .limit(pageSize)
+        .offset(offset),
+    ]);
 
     const result: Page<PurchaseHistoryItem> = createPage(
       purchaseHistory,
-      totalCount,
+      countResult[0].totalCount,
       pageNumber,
       pageSize
     );

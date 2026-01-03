@@ -12,7 +12,7 @@ describe('Add Product Endpoint', () => {
   test('should create a new product with valid data', async () => {
     const input = apple();
     const product = await addProduct(input);
-    assertProduct(product).hasName(input.name).hasCode(input.code);
+    assertProduct(product).hasName(input.name);
   });
 
   test('should reject empty product name', async () => {
@@ -38,7 +38,7 @@ describe('Add Product Endpoint', () => {
   });
 
   test('should reject big product name', async () => {
-    const data = randomProduct({ name: bigText() });
+    const data = randomProduct({ name: bigText(1025) });
     await addProduct(
       data,
       new ProblemDocument(
@@ -50,29 +50,7 @@ describe('Add Product Endpoint', () => {
           errors: [
             {
               path: 'name',
-              message: 'Too big: expected string to have <=255 characters',
-              code: 'too_big',
-            },
-          ],
-        }
-      )
-    );
-  });
-
-  test('should reject big product code', async () => {
-    const data = randomProduct({ code: bigText() });
-    await addProduct(
-      data,
-      new ProblemDocument(
-        {
-          detail: 'The request contains invalid data',
-          status: 400,
-        },
-        {
-          errors: [
-            {
-              path: 'code',
-              message: 'Too big: expected string to have <=255 characters',
+              message: 'Too big: expected string to have <=1024 characters',
               code: 'too_big',
             },
           ],

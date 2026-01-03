@@ -1,5 +1,5 @@
 {
-  "id": "424743e3-9ade-475a-a99e-b69dc49c379d",
+  "id": "8f4ca551-f2f0-4e34-bb24-c9c7e36f2c12",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -41,13 +41,7 @@
         },
         "name": {
           "name": "name",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "code": {
-          "name": "code",
-          "type": "varchar(255)",
+          "type": "varchar(1024)",
           "primaryKey": false,
           "notNull": true
         },
@@ -58,7 +52,23 @@
           "notNull": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "idx_products_category_id": {
+          "name": "idx_products_category_id",
+          "columns": [
+            {
+              "expression": "categoryid",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "products_categoryid_categories_categoryid_fk": {
           "name": "products_categoryid_categories_categoryid_fk",
@@ -124,7 +134,38 @@
           "notNull": true
         }
       },
-      "indexes": {},
+      "indexes": {
+        "idx_purchase_items_purchase_id": {
+          "name": "idx_purchase_items_purchase_id",
+          "columns": [
+            {
+              "expression": "purchaseid",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_purchase_items_product_id": {
+          "name": "idx_purchase_items_product_id",
+          "columns": [
+            {
+              "expression": "productid",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "purchase_items_purchaseid_purchases_purchaseid_fk": {
           "name": "purchase_items_purchaseid_purchases_purchaseid_fk",
@@ -194,7 +235,59 @@
           "default": "now()"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "idx_purchases_store_id": {
+          "name": "idx_purchases_store_id",
+          "columns": [
+            {
+              "expression": "storeid",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_purchases_date": {
+          "name": "idx_purchases_date",
+          "columns": [
+            {
+              "expression": "date",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_purchases_store_date": {
+          "name": "idx_purchases_store_date",
+          "columns": [
+            {
+              "expression": "storeid",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "date",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "purchases_storeid_stores_storeid_fk": {
           "name": "purchases_storeid_stores_storeid_fk",

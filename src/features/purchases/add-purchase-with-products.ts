@@ -2,26 +2,27 @@ import { Hono } from 'hono';
 import { client } from '@/database/client.js';
 import { purchaseSchema, purchaseItemSchema } from './purchase.js';
 import { products } from '@/features/products/product.js';
-import { inArray } from 'drizzle-orm';
+import { inArray, eq } from 'drizzle-orm';
 import { z } from 'zod';
 import { zValidator } from '@/utils/validation.js';
 import { createPurchase } from './add-purchase.js';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import { addProduct } from '@/features/products/add-product.js';
+import { addProducts } from '@/features/products/add-product.js';
 import { StatusCodes } from 'http-status-codes';
+import { stores } from '../stores/store.js';
+import { createResourceNotFoundPD } from '@/utils/problem-document.js';
 
 const itemSchema = z.object({
   product: z.object({
-    name: z.string().min(1).max(255),
-    code: z.string().min(1).max(255),
+    name: z.string().min(1).max(1024),
   }),
   quantity: z.number().positive(),
   price: z.number().positive(),
-  unit: z.string(),
+  unit: z.string().max(32),
 });
 
 const schema = z.object({
-  storeId: z.string().uuid(),
+  storeId: z.uuid(),
   date: z.coerce.date(),
   items: z.array(itemSchema).min(1),
 });
@@ -44,6 +45,18 @@ export const addWithProductsRoute = new Hono().post(
   zValidator('json', schema),
   async c => {
     const { storeId, date, items } = c.req.valid('json');
+    const [store] = await client
+      .select()
+      .from(stores)
+      .where(eq(stores.storeId, storeId))
+      .limit(1);
+
+    if (!store) {
+      return c.json(
+        createResourceNotFoundPD(c.req.path, 'Store not found'),
+        StatusCodes.NOT_FOUND
+      );
+    }
     const purchase = await createPurchaseWithProducts({ storeId, date, items });
     return c.json(purchase, StatusCodes.CREATED);
   }
@@ -54,34 +67,37 @@ async function createPurchaseWithProducts({
   date,
   items,
 }: AddPurchaseWithProducts) {
-  const processedItems = [];
-  const codes = items.map(item => item.product.code);
+  const names = items.map(item => item.product.name);
+
   const existingProducts = await client
     .select()
     .from(products)
-    .where(inArray(products.code, codes));
+    .where(inArray(products.name, names));
 
-  const map = new Map(existingProducts.map(p => [p.code, p]));
+  const byName = new Map(existingProducts.map(p => [p.name, p]));
 
-  for (const item of items) {
-    let productId: string;
-    const existingProduct = map.get(item.product.code);
-    if (existingProduct) {
-      productId = existingProduct.productId;
-    } else {
-      const product = await addProduct({
-        name: item.product.name,
-        code: item.product.code,
-      });
-      productId = product.productId;
+  const productsToCreate = items
+    .filter(item => !byName.has(item.product.name))
+    .map(item => ({
+      name: item.product.name,
+    }));
+
+  if (productsToCreate.length > 0) {
+    const created = await addProducts(productsToCreate);
+    for (const p of created) {
+      byName.set(p.name, p);
     }
-    processedItems.push({
-      productId,
+  }
+
+  const processedItems = items.map(item => {
+    const product = byName.get(item.product.name)!;
+    return {
+      productId: product.productId,
       quantity: item.quantity,
       price: item.price,
       unit: item.unit,
-    });
-  }
+    };
+  });
 
   return await createPurchase({ storeId, date, items: processedItems });
 }

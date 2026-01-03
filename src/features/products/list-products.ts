@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
 import { client } from '@/database/client.js';
 import { products, productSchema } from './product.js';
-import { count, eq, like, and, SQL, inArray } from 'drizzle-orm';
+import { count, eq, like, and, SQL } from 'drizzle-orm';
 import { zValidator } from '@/utils/validation.js';
 import {
   paginationSchema,
@@ -14,9 +14,6 @@ import { StatusCodes } from 'http-status-codes';
 
 const schema = paginationSchema.extend({
   name: z.string().optional(),
-  codes: z
-    .union([z.string().transform(val => [val]), z.array(z.string())])
-    .optional(),
   categoryId: z.string().uuid().optional(),
 });
 
@@ -35,29 +32,28 @@ export const listProducts = async ({
   pageNumber,
   pageSize,
   name,
-  codes,
   categoryId,
 }: ListProducts) => {
   const filters: SQL[] = [];
   const offset = (pageNumber - 1) * pageSize;
   const limit = pageSize;
   if (name) filters.push(like(products.name, `%${name}%`));
-  if (codes && codes.length > 0) filters.push(inArray(products.code, codes));
   if (categoryId) filters.push(eq(products.categoryId, categoryId));
 
-  const [{ totalCount }] = await client
-    .select({ totalCount: count() })
-    .from(products)
-    .where(and(...filters));
+  const [countResult, items] = await Promise.all([
+    client
+      .select({ totalCount: count() })
+      .from(products)
+      .where(and(...filters)),
+    client
+      .select()
+      .from(products)
+      .where(and(...filters))
+      .limit(limit)
+      .offset(offset),
+  ]);
 
-  const items = await client
-    .select()
-    .from(products)
-    .limit(limit)
-    .where(and(...filters))
-    .offset(offset);
-
-  return createPage(items, totalCount, pageNumber, pageSize);
+  return createPage(items, countResult[0].totalCount, pageNumber, pageSize);
 };
 
 export const ListProductsTool = (server: McpServer) => {
@@ -66,18 +62,17 @@ export const ListProductsTool = (server: McpServer) => {
     {
       title: 'List Products',
       description:
-        'List all products with optional filtering by name, codes (single or multiple), or category',
+        'List all products with optional filtering by name or category',
       inputSchema: schema.shape,
       outputSchema: {
         success: z.boolean(),
         page: createPageSchema(productSchema),
       },
     },
-    async ({ name, codes, categoryId, pageNumber, pageSize }) => {
+    async ({ name, categoryId, pageNumber, pageSize }) => {
       try {
         const page = await listProducts({
           name,
-          codes,
           categoryId,
           pageNumber,
           pageSize,

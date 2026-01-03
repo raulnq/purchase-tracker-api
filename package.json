@@ -17,7 +17,7 @@
     "database:up": "docker-compose up database -d",
     "database:down": "docker-compose down database",
     "database:stop": "docker-compose stop database",
-    "database:generate": "tsx ./node_modules/drizzle-kit/bin.cjs generate",
+    "database:generate": "npm run build &&tsx ./node_modules/drizzle-kit/bin.cjs generate",
     "database:migrate": "tsx ./node_modules/drizzle-kit/bin.cjs migrate",
     "database:studio": "tsx ./node_modules/drizzle-kit/bin.cjs studio"
   },

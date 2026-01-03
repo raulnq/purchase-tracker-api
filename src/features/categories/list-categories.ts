@@ -24,20 +24,21 @@ export const listRoute = new Hono().get(
     const limit = pageSize;
     if (name) filters.push(like(categories.name, `%${name}%`));
 
-    const [{ totalCount }] = await client
-      .select({ totalCount: count() })
-      .from(categories)
-      .where(and(...filters));
-
-    const items = await client
-      .select()
-      .from(categories)
-      .where(and(...filters))
-      .limit(limit)
-      .offset(offset);
+    const [countResult, items] = await Promise.all([
+      client
+        .select({ totalCount: count() })
+        .from(categories)
+        .where(and(...filters)),
+      client
+        .select()
+        .from(categories)
+        .where(and(...filters))
+        .limit(limit)
+        .offset(offset),
+    ]);
 
     return c.json(
-      createPage(items, totalCount, pageNumber, pageSize),
+      createPage(items, countResult[0].totalCount, pageNumber, pageSize),
       StatusCodes.OK
     );
   }

@@ -32,6 +32,20 @@ export const addProduct = async (data: AddProduct): Promise<Product> => {
   return product;
 };
 
+export const addProducts = async (data: AddProduct[]): Promise<Product[]> => {
+  const newProducts = data.map(item => ({
+    productId: v7(),
+    name: item.name,
+    categoryId: null,
+  }));
+
+  const createdProducts = await client
+    .insert(products)
+    .values(newProducts)
+    .returning();
+  return createdProducts;
+};
+
 export const AddProductTool = (server: McpServer) => {
   return server.registerTool(
     'add_product',
@@ -44,9 +58,9 @@ export const AddProductTool = (server: McpServer) => {
         product: productSchema.optional(),
       },
     },
-    async ({ name, code }) => {
+    async ({ name }) => {
       try {
-        const product = await addProduct({ name, code });
+        const product = await addProduct({ name });
         const structuredContent = { success: true, product: product };
         return {
           content: [

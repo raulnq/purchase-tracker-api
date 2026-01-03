@@ -59,7 +59,6 @@ export const randomPurchaseItemWithProduct = (
     unit: 'UN',
     product: {
       name: faker.commerce.productName(),
-      code: faker.string.numeric(10),
     },
     ...options,
   };

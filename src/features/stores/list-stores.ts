@@ -37,19 +37,20 @@ export const listStores = async ({
   const limit = pageSize;
   if (name) filters.push(like(stores.name, `%${name}%`));
 
-  const [{ totalCount }] = await client
-    .select({ totalCount: count() })
-    .from(stores)
-    .where(and(...filters));
+  const [countResult, items] = await Promise.all([
+    client
+      .select({ totalCount: count() })
+      .from(stores)
+      .where(and(...filters)),
+    client
+      .select()
+      .from(stores)
+      .where(and(...filters))
+      .limit(limit)
+      .offset(offset),
+  ]);
 
-  const items = await client
-    .select()
-    .from(stores)
-    .where(and(...filters))
-    .limit(limit)
-    .offset(offset);
-
-  return createPage(items, totalCount, pageNumber, pageSize);
+  return createPage(items, countResult[0].totalCount, pageNumber, pageSize);
 };
 
 export const ListStoresTool = (server: McpServer) => {

@@ -19,7 +19,6 @@ export const getRoute = new Hono().get(
       .select({
         productId: products.productId,
         name: products.name,
-        code: products.code,
         categoryId: products.categoryId,
         categoryName: categories.name,
       })

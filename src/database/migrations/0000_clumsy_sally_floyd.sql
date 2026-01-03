@@ -7,8 +7,7 @@ CREATE TABLE "purchase_tracker"."categories" (
 --> statement-breakpoint
 CREATE TABLE "purchase_tracker"."products" (
 	"productid" uuid PRIMARY KEY NOT NULL,
-	"name" varchar(255) NOT NULL,
-	"code" varchar(255) NOT NULL,
+	"name" varchar(1024) NOT NULL,
 	"categoryid" uuid
 );
 --> statement-breakpoint
@@ -40,4 +39,10 @@ CREATE TABLE "purchase_tracker"."stores" (
 ALTER TABLE "purchase_tracker"."products" ADD CONSTRAINT "products_categoryid_categories_categoryid_fk" FOREIGN KEY ("categoryid") REFERENCES "purchase_tracker"."categories"("categoryid") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "purchase_tracker"."purchase_items" ADD CONSTRAINT "purchase_items_purchaseid_purchases_purchaseid_fk" FOREIGN KEY ("purchaseid") REFERENCES "purchase_tracker"."purchases"("purchaseid") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "purchase_tracker"."purchase_items" ADD CONSTRAINT "purchase_items_productid_products_productid_fk" FOREIGN KEY ("productid") REFERENCES "purchase_tracker"."products"("productid") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "purchase_tracker"."purchases" ADD CONSTRAINT "purchases_storeid_stores_storeid_fk" FOREIGN KEY ("storeid") REFERENCES "purchase_tracker"."stores"("storeid") ON DELETE no action ON UPDATE no action;
+ALTER TABLE "purchase_tracker"."purchases" ADD CONSTRAINT "purchases_storeid_stores_storeid_fk" FOREIGN KEY ("storeid") REFERENCES "purchase_tracker"."stores"("storeid") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+CREATE INDEX "idx_products_category_id" ON "purchase_tracker"."products" USING btree ("categoryid");--> statement-breakpoint
+CREATE INDEX "idx_purchase_items_purchase_id" ON "purchase_tracker"."purchase_items" USING btree ("purchaseid");--> statement-breakpoint
+CREATE INDEX "idx_purchase_items_product_id" ON "purchase_tracker"."purchase_items" USING btree ("productid");--> statement-breakpoint
+CREATE INDEX "idx_purchases_store_id" ON "purchase_tracker"."purchases" USING btree ("storeid");--> statement-breakpoint
+CREATE INDEX "idx_purchases_date" ON "purchase_tracker"."purchases" USING btree ("date");--> statement-breakpoint
+CREATE INDEX "idx_purchases_store_date" ON "purchase_tracker"."purchases" USING btree ("storeid","date");
