@@ -8,10 +8,7 @@ services:
     exclude_from_hc: true
     environment:
       - NODE_ENV=production
-      - POSTGRES_DB=${POSTGRES_DB:?}
-      - POSTGRES_USER=${POSTGRES_USER:?}
-      - POSTGRES_SERVER=${POSTGRES_SERVER:?}
-      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_SERVER}:5432/${POSTGRES_DB}
+      - DATABASE_URL=${DATABASE_URL:?}
   api:
     build:
       context: .
@@ -22,11 +19,7 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=5000
-      - POSTGRES_DB=${POSTGRES_DB:?}
-      - POSTGRES_USER=${POSTGRES_USER:?}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:?}
-      - POSTGRES_SERVER=${POSTGRES_SERVER:?}
-      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_SERVER}:5432/${POSTGRES_DB}
+      - DATABASE_URL=${DATABASE_URL:?}
       - TOKEN=${TOKEN:?}
     healthcheck:
       test:

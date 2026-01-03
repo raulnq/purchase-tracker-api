@@ -65,10 +65,10 @@ TOKEN=your-bearer-token-here
 
 ```bash
 # Start PostgreSQL database
-npm run docker:up
+npm run database:up
 
 # Run migrations
-npm run migrate
+npm run database:migrate
 ```
 
 #### Option B: Manual PostgreSQL Setup
@@ -78,7 +78,7 @@ npm run migrate
 3. Run migrations:
 
 ```bash
-npm run migrate
+npm run database:migrate
 ```
 
 ### 5. Start the development server
@@ -199,42 +199,95 @@ The project includes comprehensive tests with custom DSL for:
 ## 🔧 Development Scripts
 
 ```bash
-npm run dev          # Start development server with hot reload
-npm run build        # Build for production
-npm run start        # Start production server
-npm run test         # Run test suite
-npm run lint         # Run ESLint
-npm run lint:fix     # Fix ESLint issues
-npm run format       # Format code with Prettier
-npm run lint:format  # Fix lint issues and format code
-npm run migrate      # Run database migrations
+npm run dev              # Start development server with hot reload
+npm run build            # Build for production
+npm run start            # Start production server
+npm run test             # Run test suite
+npm run lint             # Run ESLint
+npm run lint:fix         # Fix ESLint issues
+npm run format           # Format code with Prettier
+npm run lint:format      # Fix lint issues and format code
+npm run database:up      # Start PostgreSQL database with Docker
+npm run database:down    # Stop PostgreSQL database
+npm run database:stop    # Stop PostgreSQL database container
+npm run database:generate # Generate database migrations
+npm run database:migrate  # Run database migrations
+npm run database:studio   # Open Drizzle Studio
 ```
 
 ## 📁 Project Structure
 
 ```
 src/
-├── app.ts               # Main application setup
-├── index.ts             # Server entry point
-├── env.ts               # Environment configuration
-├── db/
-│   ├── index.ts         # Database connection
-│   ├── migrations/      # Database migration files
-│   └── schema/          # Database schema definitions
+├── app.ts                  # Main application setup
+├── index.ts                # Server entry point
+├── env.ts                  # Environment configuration
+├── database/
+│   ├── client.ts           # Database connection
+│   └── schemas.ts          # Database schema definitions
 ├── features/
-│   ├── categories/      # Category management
-│   ├── products/        # Product management
-│   ├── purchases/       # Purchase tracking
-│   └── stores/          # Store management
+│   ├── categories/
+│   │   ├── index.ts        # Route aggregation
+│   │   ├── category.ts     # Schema and types
+│   │   ├── add-category.ts
+│   │   ├── edit-category.ts
+│   │   ├── get-category.ts
+│   │   └── list-categories.ts
+│   ├── products/
+│   │   ├── index.ts
+│   │   ├── product.ts      # Schema and types
+│   │   ├── add-product.ts
+│   │   ├── edit-product.ts
+│   │   ├── get-product.ts
+│   │   ├── list-products.ts
+│   │   ├── assign-category.ts
+│   │   ├── remove-category.ts
+│   │   └── get-product-purchase-history.ts
+│   ├── purchases/
+│   │   ├── index.ts
+│   │   ├── purchase.ts     # Schema and types
+│   │   ├── add-purchase.ts
+│   │   ├── add-purchase-with-products.ts
+│   │   ├── get-purchase.ts
+│   │   └── list-purchases.ts
+│   └── stores/
+│       ├── index.ts
+│       ├── store.ts        # Schema and types
+│       ├── add-store.ts
+│       ├── edit-store.ts
+│       ├── get-store.ts
+│       └── list-stores.ts
 ├── mcp/
-│   ├── index.ts         # MCP route setup
-│   └── server.ts        # MCP server configuration
+│   ├── index.ts            # MCP route setup
+│   └── server.ts           # MCP server configuration
 ├── middlewares/
-│   ├── onError.ts       # Error handling
-│   └── onNotFound.ts    # 404 handling
-└── util/
-    ├── pagination.ts    # Pagination utilities
-    └── validator.ts     # Validation helpers
+│   ├── on-error.ts         # Error handling
+│   └── on-not-found.ts     # 404 handling
+├── types/
+│   └── pagination.ts       # Pagination types
+└── utils/
+    ├── problem-document.ts # RFC 7807 problem details
+    └── validation.ts       # Zod validation helpers
+
+tests/
+├── setup.ts                # Test setup and configuration
+├── utils.ts                # Test utilities
+├── assertions.ts           # Custom test assertions
+├── products/
+│   ├── product-dsl.ts      # Product test DSL
+│   ├── add-product.test.ts
+│   ├── list-products.test.ts
+│   └── purchase-history.test.ts
+├── purchases/
+│   ├── purchase-dsl.ts     # Purchase test DSL
+│   ├── add-purchase.test.ts
+│   └── add-purchase-with-products.test.ts
+└── stores/
+    ├── store-dsl.ts        # Store test DSL
+    ├── add-store.test.ts
+    ├── edit-store.test.ts
+    ├── get-store.test.ts
+    └── list-stores.test.ts
 ```
 
 ## 📝 Database Schema

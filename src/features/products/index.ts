@@ -1,18 +1,17 @@
 import { Hono } from 'hono';
-import { listRoute } from './listProducts.js';
-import { addRoute } from './addProduct.js';
-import { findRoute } from './findProduct.js';
-import { editRoute } from './editProduct.js';
-import { assignCategoryRoute } from './assignCategory.js';
-import { removeCategoryRoute } from './removeCategory.js';
-import { purchaseHistoryRoute } from './findProductPurchaseHistory.js';
+import { listRoute } from './list-products.js';
+import { addRoute } from './add-product.js';
+import { getRoute } from './get-product.js';
+import { editRoute } from './edit-product.js';
+import { assignCategoryRoute } from './assign-category.js';
+import { removeCategoryRoute } from './remove-category.js';
+import { purchaseHistoryRoute } from './get-product-purchase-history.js';
 
-export const productRoute = new Hono();
-
-productRoute
+export const productRoute = new Hono()
+  .basePath('/products')
   .route('/', listRoute)
   .route('/', addRoute)
-  .route('/', findRoute)
+  .route('/', getRoute)
   .route('/', editRoute)
   .route('/', assignCategoryRoute)
   .route('/', removeCategoryRoute)

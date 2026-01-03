@@ -1,13 +1,12 @@
 import { Hono } from 'hono';
-import { addRoute } from './addPurchase.js';
-import { addWithProductsRoute } from './addPurchaseWithProducts.js';
-import { listRoute } from './listPurchases.js';
-import { findRoute } from './findPurchase.js';
+import { addRoute } from './add-purchase.js';
+import { addWithProductsRoute } from './add-purchase-with-products.js';
+import { listRoute } from './list-purchases.js';
+import { getRoute } from './get-purchase.js';
 
-export const purchaseRoute = new Hono();
-
-purchaseRoute
+export const purchaseRoute = new Hono()
+  .basePath('/purchases')
   .route('/', listRoute)
   .route('/', addRoute)
   .route('/', addWithProductsRoute)
-  .route('/', findRoute);
+  .route('/', getRoute);

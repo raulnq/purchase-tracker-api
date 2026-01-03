@@ -3,7 +3,7 @@ import { ENV } from '@/env.js';
 import { app } from './app.js';
 
 process.on('uncaughtException', err => {
-  console.error(err.name, err.message);
+  console.error(err, err.message);
   process.exit(1);
 });
 
@@ -20,7 +20,7 @@ const server = serve(
 );
 
 process.on('unhandledRejection', (err: Error) => {
-  console.error(err.name, err.message);
+  console.error(err, err.message);
   server.close(() => {
     process.exit(1);
   });

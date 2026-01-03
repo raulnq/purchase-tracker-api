@@ -17,7 +17,9 @@ try {
   ENVSchema.parse(process.env);
 } catch (error) {
   if (error instanceof ZodError) {
-    const e = new Error(`Environment validation failed:\n ${error.flatten()}`);
+    const e = new Error(
+      `Environment validation failed:\n ${z.treeifyError(error)}`
+    );
     e.stack = '';
     throw e;
   } else {
