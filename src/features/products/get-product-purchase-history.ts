@@ -22,9 +22,9 @@ export type PurchaseHistoryItem = {
   purchaseId: string;
   purchaseDate: Date;
   storeName: string;
-  price: string;
-  quantity: string;
-  total: string;
+  price: number;
+  quantity: number;
+  total: number;
 };
 
 export const purchaseHistoryRoute = new Hono().get(

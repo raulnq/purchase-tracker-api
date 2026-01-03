@@ -109,7 +109,7 @@ export const createPurchase = async function ({
         purchaseId: v7(),
         storeId: storeId,
         date: date,
-        total: total.toString(),
+        total: total,
       })
       .returning();
 
@@ -119,9 +119,9 @@ export const createPurchase = async function ({
         items.map(i => ({
           purchaseId: purchase.purchaseId,
           productId: i.productId,
-          price: i.price.toString(),
-          quantity: i.quantity.toString(),
-          total: (i.price * i.quantity).toString(),
+          price: i.price,
+          quantity: i.quantity,
+          total: i.price * i.quantity,
           unit: i.unit,
         }))
       )

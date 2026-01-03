@@ -47,7 +47,11 @@ export const purchases = trackerSchema.table(
       .references(() => stores.storeId)
       .notNull(),
     date: date('date', { mode: 'date' }).notNull(),
-    total: decimal('total', { precision: 10, scale: 2 }).notNull(),
+    total: decimal('total', {
+      precision: 10,
+      scale: 2,
+      mode: 'number',
+    }).notNull(),
     createdAt: timestamp('createdat').defaultNow().notNull(),
   },
   table => [
@@ -67,10 +71,22 @@ export const purchaseItems = trackerSchema.table(
     productId: uuid('productid')
       .references(() => products.productId)
       .notNull(),
-    price: decimal('price', { precision: 10, scale: 2 }).notNull(),
-    quantity: decimal('quantity', { precision: 10, scale: 2 }).notNull(),
+    price: decimal('price', {
+      precision: 10,
+      scale: 2,
+      mode: 'number',
+    }).notNull(),
+    quantity: decimal('quantity', {
+      precision: 10,
+      scale: 2,
+      mode: 'number',
+    }).notNull(),
     unit: varchar('unit', { length: 32 }).notNull(),
-    total: decimal('total', { precision: 10, scale: 2 }).notNull(),
+    total: decimal('total', {
+      precision: 10,
+      scale: 2,
+      mode: 'number',
+    }).notNull(),
   },
   table => [
     primaryKey({ columns: [table.purchaseItemId, table.purchaseId] }),
