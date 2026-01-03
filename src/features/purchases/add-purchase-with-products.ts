@@ -32,7 +32,9 @@ export type AddPurchaseWithProducts = z.infer<typeof schema>;
 export type AddPurchaseItemWithProduct = z.infer<typeof itemSchema>;
 
 const addPurchaseWithProductsResponseSchema = z.object({
-  ...purchaseSchema.shape,
+  ...purchaseSchema.omit({ date: true, createdAt: true }).shape,
+  date: z.iso.date(),
+  createdAt: z.iso.date(),
   items: z.array(purchaseItemSchema),
 });
 
