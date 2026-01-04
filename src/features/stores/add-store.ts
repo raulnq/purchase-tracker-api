@@ -35,7 +35,7 @@ export const AddStoreTool = (server: McpServer) => {
     {
       title: 'Add Store',
       description: 'Add a new store',
-      inputSchema: schema,
+      inputSchema: schema.shape,
       outputSchema: {
         success: z.boolean(),
         store: storeSchema.optional(),

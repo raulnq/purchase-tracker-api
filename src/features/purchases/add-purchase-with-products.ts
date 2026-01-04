@@ -32,7 +32,7 @@ export type AddPurchaseWithProducts = z.infer<typeof schema>;
 export type AddPurchaseItemWithProduct = z.infer<typeof itemSchema>;
 
 const addPurchaseWithProductsResponseSchema = z.object({
-  ...purchaseSchema.omit({ date: true, createdAt: true }),
+  ...purchaseSchema.omit({ date: true, createdAt: true }).shape,
   date: z.iso.date(),
   createdAt: z.iso.date(),
   items: z.array(purchaseItemSchema),
@@ -114,7 +114,7 @@ export const AddPurchaseWithProductsTool = (server: McpServer) => {
     {
       title: 'Add Purchase with Products',
       description: "Add a new purchase and create products if they don't exist",
-      inputSchema: schema,
+      inputSchema: schema.shape,
       outputSchema: {
         success: z.boolean(),
         purchase: addPurchaseWithProductsResponseSchema.optional(),
