@@ -115,10 +115,10 @@ export const AddPurchaseWithProductsTool = (server: McpServer) => {
       title: 'Add Purchase with Products',
       description: "Add a new purchase and create products if they don't exist",
       inputSchema: schema,
-      outputSchema: {
+      outputSchema: z.object({
         success: z.boolean(),
         purchase: addPurchaseWithProductsResponseSchema.optional(),
-      },
+      }),
     },
     async ({ storeId, date, items }) => {
       try {
