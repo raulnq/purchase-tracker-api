@@ -114,7 +114,7 @@ export const AddPurchaseWithProductsTool = (server: McpServer) => {
     {
       title: 'Add Purchase with Products',
       description: "Add a new purchase and create products if they don't exist",
-      inputSchema: schema.shape,
+      inputSchema: schema,
       outputSchema: {
         success: z.boolean(),
         purchase: addPurchaseWithProductsResponseSchema.optional(),
