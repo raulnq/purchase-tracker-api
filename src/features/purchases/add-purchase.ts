@@ -46,7 +46,7 @@ export type AddPurchaseItem = z.infer<typeof itemSchema>;
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const addPurchaseResponseSchema = z.object({
-  ...purchaseSchema.shape,
+  ...purchaseSchema,
   items: z.array(purchaseItemSchema),
 });
 

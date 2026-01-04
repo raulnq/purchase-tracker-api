@@ -63,7 +63,7 @@ export const ListProductsTool = (server: McpServer) => {
       title: 'List Products',
       description:
         'List all products with optional filtering by name or category',
-      inputSchema: schema.shape,
+      inputSchema: schema,
       outputSchema: {
         success: z.boolean(),
         page: createPageSchema(productSchema),

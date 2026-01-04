@@ -52,7 +52,7 @@ export const AddProductTool = (server: McpServer) => {
     {
       title: 'Add Product',
       description: 'Add a new product',
-      inputSchema: schema.shape,
+      inputSchema: schema,
       outputSchema: {
         success: z.boolean(),
         product: productSchema.optional(),
