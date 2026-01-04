@@ -59,11 +59,11 @@ export const ListStoresTool = (server: McpServer) => {
     {
       title: 'List Stores',
       description: 'List all stores',
-      inputSchema: schema.shape,
-      outputSchema: {
+      inputSchema: schema,
+      outputSchema: z.object({
         success: z.boolean(),
         page: createPageSchema(storeSchema),
-      },
+      }),
     },
     async ({ name, pageNumber, pageSize }) => {
       try {

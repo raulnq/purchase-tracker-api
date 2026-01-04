@@ -12,7 +12,6 @@ import { StatusCodes } from 'http-status-codes';
 import { stores } from '../stores/store.js';
 import { createResourceNotFoundPD } from '@/utils/problem-document.js';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const itemSchema = z.object({
   product: z.object({
     name: z.string().min(1).max(1024),
@@ -25,18 +24,7 @@ const itemSchema = z.object({
 const schema = z.object({
   storeId: z.uuid(),
   date: z.iso.date(),
-  items: z
-    .array(
-      z.object({
-        product: z.object({
-          name: z.string().min(1).max(1024),
-        }),
-        quantity: z.number().positive(),
-        price: z.number().positive(),
-        unit: z.string().max(32),
-      })
-    )
-    .min(1),
+  items: z.array(itemSchema).min(1),
 });
 
 export type AddPurchaseWithProducts = z.infer<typeof schema>;

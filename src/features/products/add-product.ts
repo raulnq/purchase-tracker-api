@@ -52,11 +52,11 @@ export const AddProductTool = (server: McpServer) => {
     {
       title: 'Add Product',
       description: 'Add a new product',
-      inputSchema: schema.shape,
-      outputSchema: {
+      inputSchema: schema,
+      outputSchema: z.object({
         success: z.boolean(),
         product: productSchema.optional(),
-      },
+      }),
     },
     async ({ name }) => {
       try {
