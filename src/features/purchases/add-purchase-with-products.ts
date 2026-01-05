@@ -26,8 +26,8 @@ const itemSchema = purchaseItemSchema
   });
 
 const schema = purchaseSchema
-  .omit({ createdAt: true, total: true, purchaseId: true })
-  .extend({ items: z.array(itemSchema).min(1) });
+  .omit({ createdAt: true, total: true, purchaseId: true, date: true })
+  .extend({ date: z.iso.date(), items: z.array(itemSchema).min(1) });
 
 export type AddPurchaseWithProducts = z.infer<typeof schema>;
 
