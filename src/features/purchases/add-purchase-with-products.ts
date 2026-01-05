@@ -129,7 +129,14 @@ export const AddPurchaseWithProductsTool = (server: McpServer) => {
           date,
           items,
         });
-        const structuredContent = { success: true, purchase: purchase };
+        const structuredContent = {
+          success: true,
+          purchase: {
+            ...purchase,
+            date: purchase.date.toISOString(),
+            createdAt: purchase.createdAt.toISOString(),
+          },
+        };
         return {
           content: [
             {
