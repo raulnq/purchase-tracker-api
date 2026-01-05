@@ -15,30 +15,29 @@ import { zValidator } from '@/utils/validation.js';
 import { createResourceNotFoundPD } from '@/utils/problem-document.js';
 import { StatusCodes } from 'http-status-codes';
 
-const itemSchema = z.object({
-  productId: z.string().uuid(),
-  quantity: z.number().positive(),
-  price: z.number().positive(),
-  unit: z.string(),
+const itemSchema = purchaseItemSchema.omit({
+  purchaseItemId: true,
+  purchaseId: true,
+  total: true,
 });
 
-const schema = z.object({
-  storeId: z.string().uuid(),
-  date: z.coerce.date(),
-  items: z
-    .array(itemSchema)
-    .min(1)
-    .refine(
-      items => {
-        const productIds = items.map(item => item.productId);
-        const uniqueIds = new Set(productIds);
-        return uniqueIds.size === productIds.length;
-      },
-      {
-        message: 'Duplicate products are not allowed',
-      }
-    ),
-});
+const schema = purchaseSchema
+  .omit({ createdAt: true, total: true, purchaseId: true })
+  .extend({
+    items: z
+      .array(itemSchema)
+      .min(1)
+      .refine(
+        items => {
+          const productIds = items.map(item => item.productId);
+          const uniqueIds = new Set(productIds);
+          return uniqueIds.size === productIds.length;
+        },
+        {
+          message: 'Duplicate products are not allowed',
+        }
+      ),
+  });
 
 export type AddPurchase = z.infer<typeof schema>;
 

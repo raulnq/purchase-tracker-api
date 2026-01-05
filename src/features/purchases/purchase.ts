@@ -18,7 +18,7 @@ export const purchaseSchema = z.object({
   purchaseId: z.uuid(),
   storeId: z.uuid(),
   date: z.coerce.date(),
-  total: z.string(),
+  total: z.number().positive(),
   createdAt: z.coerce.date(),
 });
 
@@ -28,10 +28,10 @@ export const purchaseItemSchema = z.object({
   purchaseItemId: z.number(),
   purchaseId: z.uuid(),
   productId: z.uuid(),
-  price: z.string(),
-  quantity: z.string(),
+  price: z.number().positive(),
+  quantity: z.number().positive(),
   unit: z.string().max(32),
-  total: z.string(),
+  total: z.number().positive(),
 });
 
 export type PurchaseItem = z.infer<typeof purchaseItemSchema>;

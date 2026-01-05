@@ -12,20 +12,22 @@ import { StatusCodes } from 'http-status-codes';
 import { stores } from '../stores/store.js';
 import { createResourceNotFoundPD } from '@/utils/problem-document.js';
 
-const itemSchema = z.object({
-  product: z.object({
-    name: z.string().min(1).max(1024),
-  }),
-  quantity: z.number().positive(),
-  price: z.number().positive(),
-  unit: z.string().max(32),
-});
+const itemSchema = purchaseItemSchema
+  .omit({
+    purchaseItemId: true,
+    purchaseId: true,
+    productId: true,
+    total: true,
+  })
+  .extend({
+    product: z.object({
+      name: z.string().min(1).max(1024),
+    }),
+  });
 
-const schema = z.object({
-  storeId: z.uuid(),
-  date: z.iso.date(),
-  items: z.array(itemSchema).min(1),
-});
+const schema = purchaseSchema
+  .omit({ createdAt: true, total: true, purchaseId: true })
+  .extend({ items: z.array(itemSchema).min(1) });
 
 export type AddPurchaseWithProducts = z.infer<typeof schema>;
 
