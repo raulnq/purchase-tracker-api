@@ -123,8 +123,7 @@ export async function addPurchaseWithProducts(
       !expectedProblemDocument,
       'Expected a problem document but received CREATED status'
     );
-    const json = await response.json();
-    const purchase = parseDatesFromJSON<AddPurchaseResponse>(json, ['date']);
+    const purchase = await response.json();
     assert.ok(purchase);
     return purchase;
   } else {
