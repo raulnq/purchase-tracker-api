@@ -133,8 +133,8 @@ export const AddPurchaseWithProductsTool = (server: McpServer) => {
           success: true,
           purchase: {
             ...purchase,
-            date: purchase.date.toISOString(),
-            createdAt: purchase.createdAt.toISOString(),
+            date: purchase.date.toISOString().split('T')[0],
+            createdAt: purchase.createdAt.toISOString().split('T')[0],
           },
         };
         return {
