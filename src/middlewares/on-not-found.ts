@@ -1,8 +1,10 @@
 import type { NotFoundHandler } from 'hono';
-import { NotFoundError } from './on-error.js';
+import { StatusCodes } from 'http-status-codes';
+import { createResourceNotFoundPD } from '@/utils/problem-document.js';
 
 export const onNotFound: NotFoundHandler = c => {
-  throw new NotFoundError(
-    `The requested resource '${c.req.url}' was not found.`
+  return c.json(
+    createResourceNotFoundPD(c.req.path, 'Resource not found'),
+    StatusCodes.NOT_FOUND
   );
 };
